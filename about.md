@@ -2,14 +2,11 @@
 layout: page
 title: About
 permalink: /about/
+published: true
 ---
 
-Some information about you!
-
-### More Information
-
-A place to include any other types of information that you'd like to include about yourself.
+I'm a software developer interested in PBR, voxels and Nvidia's cuda
 
 ### Contact me
 
-[email@domain.com](mailto:email@domain.com)
+[voxel.tracer@gmail.com](mailto:voxel.tracer@gmail.com)
