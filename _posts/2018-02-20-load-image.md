@@ -1,5 +1,5 @@
 ---
-published: false
+published: true
 ---
 ## How to load a png image with stb_image
 
