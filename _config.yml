@@ -11,7 +11,7 @@ description: Development blog where I share my knowledge and projects
 # URL of your avatar or profile pic (you could use your GitHub profile pic)
 avatar: https://raw.githubusercontent.com/voxel-tracer/voxel-tracer.github.io/master/images/avatar.png
 
-theme-remote: poole/hyde
+theme-remote: hemangsk/DevJournal
 #
 # Flags below are optional
 #
