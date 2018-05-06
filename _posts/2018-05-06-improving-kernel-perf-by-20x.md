@@ -3,7 +3,7 @@ published: true
 ---
 I've been working on a highmap voxel renderer that generates the following renders:
 
-![city-render-far]({{site.baseurl}}/_posts/city_sun_far.png)
+![city-render-far]]({{ site.baseurl }}/images/city_sun_far.png)
 
 The project is looking good but the performance of the renderer is too low, it can render 2M rays/s and took 35s to render the above image.
 
