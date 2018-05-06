@@ -1,5 +1,5 @@
 ---
-published: false
+published: true
 ---
 I've been working on a highmap voxel renderer that generates the following renders:
 
