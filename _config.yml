@@ -7,15 +7,15 @@ permalink:        pretty
 #relative_permalinks: true
 
 # Setup
-title:            Hyde
-tagline:          'A Jekyll theme'
-description:      'A brazen two-column <a href="http://jekyllrb.com" target="_blank">Jekyll</a> theme that pairs a prominent sidebar with uncomplicated content. Made by <a href="https://twitter.com/mdo" target="_blank">@mdo</a>.'
-url:              http://hyde.getpoole.com
-baseurl:          /
+title:            Voxel Adventures
+tagline:          'Development blog'
+description:      'Personal development blog where I share my knowledge about CUDA and Voxel rendering'
+url:              https://voxel-tracer.github.io
+baseurl:          https://voxel-tracer.github.io
 
 author:
-  name:           'Mark Otto'
-  url:            https://twitter.com/mdo
+  name:           'Voxel Tracer'
+  url:            https://twitter.com/voxel-tracer
 
 paginate:         5
 
@@ -23,9 +23,9 @@ paginate:         5
 version:          2.1.0
 
 github:
-  repo:           https://github.com/poole/hyde
+  repo:           https://github.com/voxel-tracer/
 
 plugins:
   - jekyll-paginate
   - jekyll-gist
-
+  - jekyll-feed
