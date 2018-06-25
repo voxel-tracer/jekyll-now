@@ -1,7 +1,7 @@
 ---
 published: true
 ---
-## CUDA Path Tracer Index
+# How to write an optimized CUDA Path Tracer
 
 I'm finally going to do it. Take all what I learned in the past year writing optimized CUDA code and apply it to improve the performance of [Peter Shirley](https://twitter.com/Peter_shirley)'s [Raytracer](https://twitter.com/Peter_shirley/status/985561344555417600). This will help me to both share what I learned with others and to pickup new optimization tricks and see how they fare on a real application.
 
