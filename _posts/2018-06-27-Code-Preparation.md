@@ -1,5 +1,5 @@
 ---
-published: false
+published: true
 ---
 # Getting ready for Cuda
 
