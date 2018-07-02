@@ -1,5 +1,5 @@
 ---
-published: false
+published: true
 ---
 ## How to install Visual Studio 2017, Cuda, and get your first project running
 
