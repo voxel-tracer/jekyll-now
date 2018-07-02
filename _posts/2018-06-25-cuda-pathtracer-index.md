@@ -13,7 +13,8 @@ Disclaimer: I've been doing this for more than a year now, and I've definitely l
 
 # All posts in this series
 
-[01: Code Preparation](https://voxel-tracer.github.io/Code-Preparation/): 8M rays/s
+- [01: Code Preparation](https://voxel-tracer.github.io/Code-Preparation/): 8M rays/s
+- [02: Your first Cuda project](https://voxel-tracer.github.io/Your-First-Cuda-Project/)
 
 # Useful resources
 
