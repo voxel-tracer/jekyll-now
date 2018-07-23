@@ -1,5 +1,5 @@
 ---
-published: false
+published: true
 ---
 ## Our first, and slow, Cuda kernel
 
