@@ -19,7 +19,7 @@ No approach is a clear winner, so I've picked the lightweight kernel to make it 
 
 Let's start by figuring out what takes most of our rendering time. Profiling 10 frames of the application we get the following:
 
-![cpu-profile]({{site.baseurl}}/images/CpuProfileWithoutLightSampling.png)
+![cpu-profile]({{site.baseurl}}/images/CpuProfileWithoutLightSampling.PNG)
 
 we can see that +44% of rendering time is spent in HitWorld(), this makes it the perfect candidate for our first lightweight kernel
 
