@@ -15,6 +15,7 @@ Disclaimer: I've been doing this for more than a year now, and I've definitely l
 
 - [01: Code Preparation](https://voxel-tracer.github.io/Code-Preparation/): 8M rays/s
 - [02: Your first Cuda project](https://voxel-tracer.github.io/Your-First-Cuda-Project/)
+- [03: Lightweight Kernel](https://voxel-tracer.github.io/lightweight-kernel/): 8.6M rays/s
 
 # Useful resources
 
