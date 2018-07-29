@@ -1,5 +1,5 @@
 ---
-published: false
+published: true
 ---
 ## Using CUDA profiler to figure why our renderer is slow
 
