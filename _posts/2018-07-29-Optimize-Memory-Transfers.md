@@ -8,7 +8,8 @@ In the previous post we did a performance analysis of our cpu code for the 10 fi
 ![cpu-profile]({{site.baseurl}}/images/CpuProfileWithoutLightSampling.PNG)
 
 We realized that **44%** of the rendering time, or **4.2s**, is spent in _HitWorld()_. Our CUDA implementation didn't show any performance improvement, so let's use Nvidia CUDA profiler to figure out why.
-One of the tools provided by CUDA is a handy [command line profiler](https://voxel-tracer.github.io/lightweight-kernel/). We just need to pass our executable to the profiler as follows:
+
+One of the tools provided by CUDA is a handy [command line profiler](https://docs.nvidia.com/cuda/profiler-users-guide/index.html#nvprof-overview). We just need to pass our executable to the profiler as follows:
 ```
 nvprof.exe ./Cpp/Windows/x64/Release/TestCpu.exe
 ```
@@ -31,14 +32,17 @@ And it outputs among other things the following summary:
                     0.00%  2.5530us         3     851ns     364ns  1.8240us  cuDeviceGetCount
                     0.00%  1.0940us         2     547ns     364ns     730ns  cuDeviceGet
 ```
-From the report we can see that intersection kernel only takes **400m**s which is great compared to the **4.2s** taken when running on cpu. We can also see that most of the time is spent transferring memory between the host (cpu) and the device (gpu): cudaMemCpy takes **4.6s** or **96%** of the time. 
+From the report we can see that intersection kernel only takes **386m**s which is great compared to the **4.2s** taken on cpu. We can also see that most of the time is spent transferring memory between the host (cpu) and the device (gpu): cudaMemcpy takes **4.6s** or **96%** of the time. 
 Let's try to understand why this is happening.
 
 ## How much memory are we copying per frame ?
 
 numRays = imageWidth x imageHeight x samplesPerPixel
+
 In our particular test: numRays = 1280 x 720 x 4 = 3,686,400 rays
+
 size of rays array = numRays x sizeof(cRay) = 3,686,400 x 28 = 103,219,200B
+
 size of hits array = numRay x sizeof(cHit) = 3,686,400 x 32 = 117,964,800
 
 For each depth iteration (kMaxDepth+1 iterations) we need to copy all rays to the device and all hits from the device so the total memory copied each frame is about **2.2GB**. And for 10 frames it's **22GB**. This seems a lot, but it depends how fast can we copy the memory to and from the device.
@@ -69,7 +73,7 @@ Looks like memory transfer between host and device memories is really slow and c
 - and we also just reduce how much data we need to copy
 
 ## Move more code from host to device
-As we noted in the previous post, another approach to optimize our renderer is to move the whole rendering logic to the gpu. In particular the only data we need to transfer is the computed colors, and depending on how many frames we compute on gpu at once we may only need to copy once at the end of the rendering. We'll leave this to later in this post series.
+As we noted in the previous post, another approach to optimize our renderer is to move the whole rendering logic to the gpu. In this case the only data we need to transfer is the computed colors, and depending on how many frames we compute on gpu at once we may only need to copy once at the end of the rendering. We'll leave this to later in this post series.
 
 ## Use a single large transfer
 To reduce memory copy overhead, instead of copying a lot of small batches of data, we could combine them into a single copy. Only way we can do it in the lightweight approach is to compute more samples per pixels and use less frames, e.g. 8 samples x 50 frames instead of 4 samples x 100 frames.
@@ -77,7 +81,8 @@ Doing so didn't improve the performance of my renderer, as I guess +1GB per tran
 
 ## Using Pinned memory
 Looking at the bandwidth test results above, we can see that pinned host memory is nearly twice as fast than regular host memory.
-The change is really simple: instead of allocating host memory using malloc() or new() we are going to use cudaMallocHost(). Pinned memory is limited though, and allocating too much of it may affect the performance of the OS. Here is a [link to the change](https://github.com/voxel-tracer/CudaPathTracer/commit/582cc636f83e63dbe0384e6565dd25b773a1b607)
+
+The [change](https://github.com/voxel-tracer/CudaPathTracer/commit/582cc636f83e63dbe0384e6565dd25b773a1b607) is really simple: instead of allocating host memory using malloc() or new() we are going to use cudaMallocHost(). Pinned memory is limited though, and allocating too much of it may affect the performance of the OS.
 
 With This change, renderer's performance increased to **11.1M rays/s**.
 nvprof does show that for 10 frames we are now spending **2.4s** doing the copy instead of **4.6s**:
