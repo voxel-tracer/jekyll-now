@@ -2,9 +2,9 @@
 published: true
 ---
 ## Alternative handling of done rays
-In previous posts we made the decision to copy all rays to the device even if they are done and just skip them if they are done. But if a large proportion of rays is done, then we wasting time copying them to the device.
+In previous posts we made the decision to copy all rays to the device even if they are done, But if a large proportion of rays is done, then we are wasting time copying them to the device.
 
-I instrumented the code to count how many rays are done after each depth iteration, and here are the results for one of the rendered frame:
+I instrumented the code to count how many rays are still active after each depth iteration, and here are the results for one of the rendered frame:
 
 ```
 depth 0: 3686400/3686400 (100%)
@@ -20,12 +20,10 @@ depth 9: 11901/3686400 (.3%)
 depth 10: 7681/3686400 (.2%)
 ```
 
-Or if we count the total number of active rays across all depth iterations we only have **~8.5M** active rays from a total of **36.8M rays**. So basically only **23%** of the data copied actually matters. Memory transfer is expensive so we should only copy the active rays.
+If we count the total number of active rays across all depth iterations we only have **~8.5M** active rays from a total of **36.8M rays**. So basically only **23%** of the data copied actually matters. Memory transfer is expensive so we should only copy the active rays.
 
 ## Only copy active rays
-One of the decisions we made we we wrote the HitWorld kernel was to copy all rays to gpu and mark the non active ones as done. An alternative is to remove, or skip, those rays and only handle active rays. 
-
-An easy way to do this in _TraceIterative()_ is to keep track of a read and write index that both start at 0 and only increment the write index when we process an active ray. Here is a [link to the complete change](https://github.com/voxel-tracer/CudaPathTracer/commit/d2450b0a509bec38edbc44148fbb192048dd6193#diff-a51e0aea7aae9c8c455717cc7d8f957b)
+An alternative to copying all rays to gpu is to remove, or skip, those rays and only handle active rays. An easy way to do this in _TraceIterative()_ is to keep track of a read and write index that both start at 0 and only increment the write index when we process an active ray. We use the write index to write the next active ray. Here is a [link to the complete change](https://github.com/voxel-tracer/CudaPathTracer/commit/d2450b0a509bec38edbc44148fbb192048dd6193#diff-a51e0aea7aae9c8c455717cc7d8f957b).
 
 With this change, the renderer's performance went up to **15.8M rays/s**. Nvprof output is as follows:
 ```
@@ -49,11 +47,12 @@ With this change, the renderer's performance went up to **15.8M rays/s**. Nvprof
                     0.00%  1.0940us         1  1.0940us  1.0940us  1.0940us  cuDeviceGet
 ```
 
-As we can see memory transfer went down from **1.3s** to 385ms and hitWorld kernel from 235ms to 137ms. This is really good compared to the original numbers we had: 4.6s for memory transfer and 386ms for the kernel.
-Let's take another look at the cpu profiler report:
+As we can see memory transfer went down from **1.3s** to **385ms** and hitWorld kernel from **235ms** to **137ms**. This is really good compared to the original numbers we had: **4.6s** for memory transfer and **386ms** for the kernel.
+
+Let's profile the cpu side of our code to see where we are spending the rendering time now:
 
 ![cpu-profile]({{site.baseurl}}/images/cpuProfileAfterRayCompaction.PNG)
 
 Looks like we are on the right track: _HitWorldDevice()_, which includes memory transfer to and from the gpu + the kernel run, only takes **6.71%** of the total execution time.
 
-It's important to note that the benefits we saw from our change depend on the scene and camera position. I'ts possible to come up with a particular scene where most of the rays bounce back for all 10 depth iterations. But even for those "worst" cases, only copying the active rays shouldn't make the performance worse.
+It's important to note that the benefits we saw from our change depend on the scene and camera position. I'ts possible to come up with a particular scene where most of the rays bounce back for all 10 depth iterations and remain active all that time. But even for those "worst" cases, only copying the active rays shouldn't make the performance worse.
