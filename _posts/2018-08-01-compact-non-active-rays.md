@@ -1,5 +1,5 @@
 ---
-published: false
+published: true
 ---
 ## Alternative handling of done rays
 In previous posts we made the decision to copy all rays to the device even if they are done and just skip them if they are done. But if a large proportion of rays is done, then we wasting time copying them to the device.
