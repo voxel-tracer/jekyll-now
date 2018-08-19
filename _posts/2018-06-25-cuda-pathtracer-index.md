@@ -18,6 +18,7 @@ Disclaimer: I've been doing this for more than a year now, and I've definitely l
 - [03: Lightweight Kernel](https://voxel-tracer.github.io/lightweight-kernel/): 8.6M rays/s
 - [04: Optimize Memory Transfers](https://voxel-tracer.github.io/Optimize-Memory-Transfers/): 12.3 M rays/s
 - [05: Compact non active Rays](https://voxel-tracer.github.io/compact-non-active-rays/): 15.8M rays/s
+- [06: Scatter and Ray Generation on GPU](https://voxel-tracer.github.io/scatter-kernel/): 86.5M rays/s
 
 # Useful resources
 
