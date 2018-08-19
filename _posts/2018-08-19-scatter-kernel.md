@@ -1,5 +1,5 @@
 ---
-published: false
+published: true
 ---
 Move more rendering logic to the gpu
 
