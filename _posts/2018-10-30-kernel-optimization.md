@@ -10,12 +10,12 @@ Before we start profiling our code, we make a slight change to the project setti
 
 To do this, right click on your Cuda project in the solution explorer and choose **Properties**, then click on **CUDA C/C++** on the left, then **Device** and finally set **Generate Line Number Information** to **Yes (-lineinfo)** as shown by the following screenshot:
 
-![project-settings]({{site.baseurl}}/images/post7/Project-Settings.PNG)
+![project-settings]({{site.baseurl}}/images/post7-Project-Settings.PNG)
 
 ## Profiler's Timeline
 Once we run the visual profiler, the first thing we see is the timeline view of our application:
 
-![timeline-0]({{site.baseurl}}/images/post7/timeline0.PNG)
+![timeline-0]({{site.baseurl}}/images/post7-timeline0.PNG)
 
 This is already useful as we get to visually see how long each device operation takes. Few things we notice already:
 - _Scatter_ kernel for depth 0 is the longest operation per frame **~17ms**, this confirms what we already knew from _nvprof_
@@ -30,17 +30,17 @@ First stage is **Examine GPU Usage**. For complex applications where multiple ke
 
 We click on **Examine Individual Kernels**, and we get this list:
 
-![individual-kernels-0]({{site.baseurl}}/images/post7/individual-kernels-0.PNG)
+![individual-kernels-0]({{site.baseurl}}/images/post7-individual-kernels-0.PNG)
 
 The profiler sorts all kernels by performance importance, so we can quickly see which kernel should be optimized first to get the highest impact on performance. _Scatter_ kernel for depth 0 is the bottleneck so let's get more information about it. After selecting the kernel, we click on the next step which is **Perform Kernel Analysis**, and we get the following:
 
-![kernel-analysis-0]({{site.baseurl}}/images/post7/kernel-analysis-0.PNG)
+![kernel-analysis-0]({{site.baseurl}}/images/post7-kernel-analysis-0.PNG)
 
 The analysis actually points that latency issues are most likely the cause of the low performance of the kernel. Latency issues indicate that our kernel is not fully utilizing the hardware as most warps are idle waiting on either an instruction or memory dependency to be done first. Here is a good [Nvidia's developer blog post](https://devblogs.nvidia.com/cuda-7-5-pinpoint-performance-problems-instruction-level-profiling/) That goes into more details about how to profile latency issues.
 
 Following the guided analysis, we click on the next step **Perform Latency Analysis**. The profiler concludes that kernel occupancy is not limiting kernel performance. Occupancy being not an issue, we naturally click on the next analysis step **Show Kernel Profile - PC Sampling**, this samples additional metrics to help pinpoint what's causing latency issues:
 
-![sample-distribution-0]({{site.baseurl}}/images/post7/sample-distribution-0.PNG)
+![sample-distribution-0]({{site.baseurl}}/images/post7-sample-distribution-0.PNG)
 
 **45%** of the latency issues are related to memory dependency. [CUDA profiler's documentation](https://docs.nvidia.com/cuda/profiler-users-guide/index.html#warp-state-nvvp) gives a very good description on memory dependency and has multiple suggestions on how to improve the performance. In particular:
 
@@ -48,7 +48,7 @@ Following the guided analysis, we click on the next step **Perform Latency Analy
 
 Following the profiler's suggestion we switch to **Unguided Analysis**, then we click on **Global Memory Access Pattern**:
 
-![global-memory-access-pattern-0]({{site.baseurl}}/images/post7/global-memory-access-pattern-0.PNG)
+![global-memory-access-pattern-0]({{site.baseurl}}/images/post7-global-memory-access-pattern-0.PNG)
 
 Each line points to a specific memory instruction and how many global accesses the instruction is currently doing vs how much it should if it was fully coalesced. We can see that most instructions are using **2x - 6x** more accesses than they should. Clicking on any of those lines shows the line of code related to it (that's why we enabled lineinfo generation at the beginning of this post).
 
@@ -102,9 +102,9 @@ Let's go one step further and split color and attenuation components into separa
 
 Using the _visual profiler_, and looking at the timeline before and after this last change:
 
-![timeline1-before]({{site.baseurl}}/images/post7/timeline1-before.PNG)
+![timeline1-before]({{site.baseurl}}/images/post7-timeline1-before.PNG)
 
-![timeline1-after]({{site.baseurl}}/images/post7/timeline1-after.PNG)
+![timeline1-after]({{site.baseurl}}/images/post7-timeline1-after.PNG)
 
 We can see that it's now taking **21ms** each frame to copy the colors back to cpu vs **12ms** before. This is because we now need to copy 3 buffers from device to host and iterate over each one of them which takes longer.
 
@@ -139,6 +139,6 @@ Our render's performance increased gradually from **86.5M rays/s** to an incredi
 All our improvements are around global memory access, which shows just how slow those accesses are and why we need to write the kernels to optimize how we access the data from global memory, either by using the proper structures to minimizes the accesses or when possible to use different kind of device memory.
 Running the profiler once more, _Scatter_ kernel is still at the top of the list of kernels to optimize and its performance is dominated by memory accesses:
 
-![scatterKernel-final]({{site.baseurl}}/images/post7/scatterKernel-final.PNG)
+![scatterKernel-final]({{site.baseurl}}/images/post7-scatterKernel-final.PNG)
 
 Even though we are using _constant memory_ and the rays are coalesced, it's still a lot of data that the kernel needs to read and write each iteration's of each frame.
