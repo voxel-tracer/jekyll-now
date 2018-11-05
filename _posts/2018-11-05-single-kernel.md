@@ -1,7 +1,7 @@
 ---
 published: true
 ---
-## Optimizing memory access by combining the kernels into a single one
+Optimizing memory access by combining the kernels into a single one
 
 In the previous post we were able to render **348M rays/s**. As we've seen, accessing global memory is slow and all our optimizations were targeting those accesses. In this post we are going to rewrite the rendering logic to reduce those accesses to a minimum.
 
