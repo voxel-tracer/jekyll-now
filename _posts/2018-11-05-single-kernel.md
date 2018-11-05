@@ -1,5 +1,5 @@
 ---
-published: false
+published: true
 ---
 ##Optimizing memory access by combining the kernels into a single one
 
