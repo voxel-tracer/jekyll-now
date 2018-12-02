@@ -1,5 +1,5 @@
 ---
-published: false
+published: true
 ---
 Tuning the renderer for up to 100x speedup
 
