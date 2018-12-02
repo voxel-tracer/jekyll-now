@@ -21,6 +21,7 @@ Disclaimer: I've been doing this for more than a year now, and I've definitely l
 - [06: Scatter and Ray Generation on GPU](https://voxel-tracer.github.io/scatter-kernel/): 86.5M rays/s
 - [07: Guided Optimization](_posts/2018-10-30-kernel-optimization.md): 348M rays/s
 - [08: Optimizing memory access by combining the kernels into a single one](https://voxel-tracer.github.io/single-kernel/): 716.1M ray/s
+- [09: Auto-tuning](https://voxel-tracer.github.io/Auto-tuning/): 872.0M rays/s
 
 # Useful resources
 
