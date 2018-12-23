@@ -19,7 +19,7 @@ Disclaimer: I've been doing this for more than a year now, and I've definitely l
 - [04: Optimize Memory Transfers](https://voxel-tracer.github.io/Optimize-Memory-Transfers/): 12.3 M rays/s
 - [05: Compact non active Rays](https://voxel-tracer.github.io/compact-non-active-rays/): 15.8M rays/s
 - [06: Scatter and Ray Generation on GPU](https://voxel-tracer.github.io/scatter-kernel/): 86.5M rays/s
-- [07: Guided Optimization](_posts/2018-10-30-kernel-optimization.md): 348M rays/s
+- [07: Guided Optimization](https://voxel-tracer.github.io/kernel-optimization/): 348M rays/s
 - [08: Optimizing memory access by combining the kernels into a single one](https://voxel-tracer.github.io/single-kernel/): 716.1M ray/s
 - [09: Auto-tuning](https://voxel-tracer.github.io/Auto-tuning/): 872.0M rays/s
 - [10: Reduce thread divergence](https://voxel-tracer.github.io/reduce-thread-divergence/): 1.2G rays/s
