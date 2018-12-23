@@ -1,5 +1,5 @@
 ---
-published: false
+published: true
 ---
 ## Improving performance by increasing warp execution efficiency
 
