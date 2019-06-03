@@ -1,5 +1,5 @@
 ---
-published: false
+published: true
 ---
 ## How to build "Understanding the Efficiency of Ray Traversal on GPUs"
 
