@@ -13,7 +13,7 @@ Luckily someone already figured out how to fix this. The following Github [repos
 
 The repository doesn't contain the scenes' .obj file, most likely because they take too much space. You just need to copy the whole scenes folder from the original source code.
 
-Trying to load the VS solution as is doesn't work though, as it is expecting CUDA v8.0 to be installed. The fix is simple, just edit framework.vcxproj and rt.vcxproj and replace all occurrences of "CUDA 8.0" with "CUDA 9.2" (or whatever version you have). 
+Trying to load the VS solution as is doesn't work though, as it is expecting CUDA v8.0 to be installed. The fix is simple, just edit _framework.vcxproj_ and _rt.vcxproj_ and replace all occurrences of "CUDA 8.0" with "CUDA 9.2" (or whatever version you have). 
 
 You can then build the project, just make sure you pick "Release" and "x64" as the build's configuration and platform. Once the build finishes, you can run the program either in interactive mode (default) or in batch mode
 
